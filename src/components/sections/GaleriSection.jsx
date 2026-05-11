@@ -26,23 +26,14 @@ export default function GaleriSection() {
 
   useEffect(() => {
     getGaleri({ limit: 6, tampil_beranda: 1 })
-      .then((res) => setGaleri(res.data?.data || res.data || dummyGaleri))
+      .then((res) => {
+        const result = res.data?.data?.data ?? res.data?.data ?? res.data ?? []
+        setGaleri(Array.isArray(result) && result.length > 0 ? result : dummyGaleri)
+      })
       .catch(() => setGaleri(dummyGaleri))
       .finally(() => setLoading(false))
   }, [])
 
-  /*
-    Layout grid sesuai desain gambar 1:
-    ┌─────────────┬───┐
-    │             │ 2 │
-    │      1      ├───┤
-    │  (besar)    │ 3 │
-    ├───┬───┬─────┘───┤  ← baris bawah: 3 kotak kecil
-    │ 4 │ 5 │    6    │
-    └───┴───┴─────────┘
-
-    Implementasi: CSS grid 3 kolom + row-span untuk item besar
-  */
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
@@ -73,11 +64,7 @@ export default function GaleriSection() {
         >
           {galeri.map((item, i) => {
             const fotoUrl = item.foto ? `${STORAGE_URL}/${item.foto}` : null
-
-            // Item 0 (indeks 0) = gambar besar kiri atas, span 2 baris
             const isBig = i === 0
-            // Item 1 & 2 = kolom kanan atas (kecil)
-            // Item 3, 4, 5 = baris bawah (kecil)
 
             return (
               <Link
@@ -98,13 +85,10 @@ export default function GaleriSection() {
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
-                  /* Placeholder saat foto belum ada */
                   <div className="w-full h-full bg-gradient-to-br from-primary/10 to-dark-400 flex items-center justify-center text-gray-600">
                     <IconCamera />
                   </div>
                 )}
-
-                {/* Overlay nama kegiatan saat hover */}
                 <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex items-end p-2">
                   <span className="text-white text-xs font-semibold line-clamp-1">{item.judul}</span>
                 </div>
