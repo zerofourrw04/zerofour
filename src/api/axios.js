@@ -4,7 +4,7 @@ const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Accept': 'application/json',
-    // ← hapus Content-Type dari sini, biar axios set otomatis sesuai request
+    'ngrok-skip-browser-warning': 'true',
   },
 })
 
@@ -12,7 +12,6 @@ api.interceptors.request.use((config) => {
   const token = localStorage.getItem('token')
   if (token) config.headers.Authorization = `Bearer ${token}`
 
-  // Kalau bukan FormData, baru set Content-Type json
   if (!(config.data instanceof FormData)) {
     config.headers['Content-Type'] = 'application/json'
   }
