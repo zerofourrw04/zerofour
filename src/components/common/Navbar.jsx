@@ -7,23 +7,6 @@ const WhatsAppIcon = () => (
   </svg>
 )
 
-const HamburgerIcon = ({ open }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
-    {open ? (
-      <>
-        <line x1="18" y1="6" x2="6" y2="18" />
-        <line x1="6" y1="6" x2="18" y2="18" />
-      </>
-    ) : (
-      <>
-        <line x1="3" y1="6" x2="21" y2="6" />
-        <line x1="3" y1="12" x2="21" y2="12" />
-        <line x1="3" y1="18" x2="21" y2="18" />
-      </>
-    )}
-  </svg>
-)
-
 export default function Navbar() {
   const { pathname } = useLocation()
   const [menuOpen, setMenuOpen] = useState(false)
@@ -47,7 +30,7 @@ export default function Navbar() {
     <nav className="fixed top-0 w-full z-50 bg-black/80 backdrop-blur border-b border-white/10">
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
 
-        {/* ── Logo kiri ── */}
+        {/* Logo */}
         <Link to="/" className="flex items-center gap-3" onClick={closeMenu}>
           <img src="/ikon-zerofour.jpg" alt="Ikon Zero Four" className="h-10 w-10 object-contain" />
           <div className="flex flex-col justify-center">
@@ -56,14 +39,17 @@ export default function Navbar() {
           </div>
         </Link>
 
-        {/* ── Menu tengah (desktop) ── */}
+        {/* Menu desktop */}
         <div className="hidden md:flex items-center gap-6 text-sm">
           {navLinks.map(({ to, label }) => (
             <Link
               key={to}
               to={to}
-              className={`relative transition-colors px-3 py-1 rounded-full
-                ${isActive(to) ? 'text-[#00ff88] font-semibold' : 'text-gray-300 hover:text-primary'}`}
+              className={`transition-colors px-3 py-1 rounded-full ${
+                isActive(to)
+                  ? 'text-[#00ff88] font-semibold'
+                  : 'text-gray-300 hover:text-primary'
+              }`}
               style={isActive(to) ? { outline: '1.5px solid #00ff88', outlineOffset: '2px' } : {}}
             >
               {label}
@@ -71,7 +57,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* ── Kanan: tombol WA + hamburger ── */}
+        {/* Kanan */}
         <div className="flex items-center gap-3">
           
             href="https://wa.me/6281234567890"
@@ -83,18 +69,29 @@ export default function Navbar() {
             <span className="hidden sm:inline">Hubungi Kami</span>
           </a>
 
-          {/* Hamburger — hanya mobile */}
+          {/* Hamburger mobile */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden text-white p-1 rounded-lg hover:bg-white/10 transition-colors"
+            className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
             aria-label="Toggle menu"
           >
-            <HamburgerIcon open={menuOpen} />
+            {menuOpen ? (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-6 h-6">
+                <line x1="3" y1="6" x2="21" y2="6" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="18" x2="21" y2="18" />
+              </svg>
+            )}
           </button>
         </div>
       </div>
 
-      {/* ── Mobile Menu Dropdown ── */}
+      {/* Mobile menu */}
       {menuOpen && (
         <div className="md:hidden bg-black/95 backdrop-blur border-t border-white/10 px-4 py-4 flex flex-col gap-2">
           {navLinks.map(({ to, label }) => (
@@ -102,16 +99,15 @@ export default function Navbar() {
               key={to}
               to={to}
               onClick={closeMenu}
-              className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors
-                ${isActive(to)
+              className={`px-4 py-3 rounded-xl text-sm font-medium transition-colors ${
+                isActive(to)
                   ? 'bg-primary/10 text-primary border border-primary/30'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white'}`}
+                  : 'text-gray-300 hover:bg-white/5 hover:text-white'
+              }`}
             >
               {label}
             </Link>
           ))}
-
-          {/* WA button di mobile menu */}
           
             href="https://wa.me/6281234567890"
             target="_blank"
